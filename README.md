@@ -147,11 +147,56 @@ The classification baseline utilized **Logistic Regression** to predict market d
 - The baseline directional model achieved an accuracy of 46.81% for Gold and 46.61% for Silver, slightly below the random-chance threshold. Detailed analysis of the classification report reveals a strong bias toward predicting downward movement (80% recall for Class 0) while failing to capture the upward movements.
 - These results reinforce the conclusion that simple linear classification is insufficient for this dataset, justifying the move to Rolling/Trend features and Non-linear ensemble models in the next phase to improve the balance between precision and recall.
 
-### Next Actions
-- **Incorporate Trend/Rolling Features**: Incorporate the trend/rolling features (5-day Momentum, 20-day SMA distance, and 10-day volatility) into the training set to provide the models with more context and momentum signals that raw macro lags currently lack.
-- **Regularized Regression for Price Prediction**: Explore Ridge and Lasso Regression to address potential multi-collinearity, aiming to move the R2 score into positive territory by penalizing less impactful macro variables.
-- **Non-Linear Classification for Directional Accuracy**: Transition from linear baselines to Random Forest and XGBoost Classifiers to capture the complex, non-linear relationships between macro-economic changes and gold/silver price action.
-- **Hyperparameter Optimization**: Implement Hyperparameter Tuning (e.g., GridSearchCV) for the ensemble models to optimize the balance between Precision and Recall, specifically targeting an improvement in accuracy rate.
+### Advanced Modeling & Feature Engineering
+
+Explored additional machine learning models - **Ridge**, **Lesso** and tree-based **Random Forest Regressor** for Gold price prediction using simple lag features. Despite applying Regularization (Ridge/Lasso) and Ensemble methods (Random Forest), the R2 scores remained consistently negative, and the Lasso model reduced all feature coefficients to zero. This indicates that daily macro-economic lags do not have a direct linear or non-linear predictive relationship with exact price returns. Consequently, we moved our focus onto **Price Direction Classification**, focusing on predicting market movement (Up/Down).
+
+Having previous logistic regression as baseline, we experimented tree-based clasification, **Random Forest Classifier**, with lag features. Using GridSearchCV, hyperparameters were turned and the best model achieved 54.50% accuracy for gold and 52.88% accuracy for silver, outperforming the logistic regression. This confirms that the relationships between macro indicators and gold/silver prices are non-linear.
+
+#### Trend and Rolling Features
+
+We then transitioned from a purely macro-economic feature set to a hybrid model including technical indicators (trend and rolling), aiming to capture the non-linear relationship between market momentum and subsequent price direction. We engineering following feature set to demonstrate momentum and volatility of Gold and Silver. 
+
+* **5-day Momentum**
+* **20-day SMA distance**
+* **10-day Rolling Volatility**
+
+The transition from a lag-only model to a hybrid Lag + Trend approach resulted in a slight reduction in raw accuracy (53.29% for gold and 53.08% for silver) when using Random Forest Classifier but achieved a significantly more balanced predictive profile. By incorporating trend/momentum features, the model's ability to identify downward reversals (Class 0 Recall - ability to catch days when market turns and goes down) improved significantly. This suggests that while macro-economic lags drive the primary gold trend, technical indicators are essential for capturing the non-linear reversals that traditional lag features often miss.
+
+We finally applied **Gradient Boost (XGBoost)** with hybrid Lag + Trend approach, tuning hyperparameters with GridSearchCV, which achived a moderate accuracy rate for financial trading assets. The XGBoost model emerged as the most robust predictor for gold, achieving a more sophisticated balance between catching 'up' days and identifying 'turning down' days. By utilizing sequential boosting, it reached a Class 0 Recall of 18%, proving it is not just following the trend but actively looking for market reversals. While its raw accuracy (52.88%) was slightly lower than the Random Forest, its superior ability to navigate market reversals makes it the most reliable choice for a real-world trading environment.
+
+The XGBoost model for Silver achieved a Macro F1-Score of 0.43 and a Class 1 (Up) Recall of 87%, ensuring that the model remains highly sensitive to upward momentum while maintaining a disciplined approach to reversals. While its raw accuracy (52.58%) was slightly less than the Random Forest, its superior precision for "Down" days (47%) indicates it is less prone to "false alarms" in declining markets.
+
+## Evaluation
+
+After the initial failure of linear baselines, the project transitioned to non-linear ensemble methods and advanced feature engineering. This shift allowed the models to capture the complex relationships and technical overextensions inherent in the precious metals markets.
+
+### Model Performance Comparison
+We evaluated three distinct model architectures across both Gold and Silver. While Gold benefited from the sequential learning of XGBoost, Silver’s volatility was best managed by Random Forest.
+
+| Asset | Model Configuration | Accuracy | Macro F1-Score | Class 0 (Down) Recall |
+| :--- | :--- | :--- | :--- | :--- |
+| **Gold** | Baseline Logistic Regression | 46.81% | 0.44 | 77.00% (Biased) |
+| **Gold** | Random Forest (Lag + Trend) | 54.50% | 0.41 | 04.00% |
+| **Gold** | **XGBoost (Lag + Trend)** | **52.88%** | **0.46** | **18.00%** |
+| **Silver**| Baseline Logistic Regression | 46.61% | 0.38 | 89.00% (Biased) |
+| **Silver**| XGBoost (Log + Trend) | 52.58% | 0.43 | 13.00% |
+| **Silver**| **Random Forest (Lag + Trend)** | **53.53%** | **0.48** | **23.00%** |
+
+### Feature Importance Insights
+By utilizing `feature_importances_`, we decoded the "Predictive Logic" of our champion models:
+
+**Gold Champion (XGBoost):**
+* **Market Sentiment:** Rolling volatility and the VIX index were primary drivers, acting as "fear gauges."
+* **Mean Reversion:** Distance from the 20-day SMA was a top-tier indicator for identifying when Gold was **overextended**.
+* **Macro Stability:** CPI (Inflation) and 10-Year Yields provided the fundamental floor for directional moves.
+
+**Silver Champion (Random Forest):**
+* **Growth Correlation:** Unlike Gold, Silver showed a high dependency on the **S&P 500** and **Oil prices**, reflecting its industrial demand.
+* **Momentum Clustering:** 5-day momentum was the strongest feature, confirming Silver as a high-beta, trend-following asset.
+* **Relative Value:** The **Gold-Silver Ratio** proved essential for identifying technical reversals.
+
+
 
 
 
