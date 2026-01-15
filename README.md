@@ -180,10 +180,10 @@ We evaluated three distinct model architectures across both Gold and Silver. Whi
 | Asset | Model Configuration | Accuracy | Macro F1-Score | Class 0 (Down) Recall |
 | :--- | :--- | :--- | :--- | :--- |
 | **Gold** | Baseline Logistic Regression | 46.81% | 0.44 | 77.00% (Biased) |
-| **Gold** | Random Forest (Lag + Trend) | 54.50% | 0.41 | 04.00% |
+| **Gold** | Random Forest (Lag + Trend) | 53.29% | 0.43 | 12.00% |
 | **Gold** | **XGBoost (Lag + Trend)** | **52.88%** | **0.46** | **18.00%** |
 | **Silver**| Baseline Logistic Regression | 46.61% | 0.38 | 89.00% (Biased) |
-| **Silver**| **Random Forest (Lag + Trend)** | **53.53%** | **0.48** | **23.00%** |
+| **Silver**| **Random Forest (Lag + Trend)** | **53.08%** | **0.48** | **23.00%** |
 | **Silver**| XGBoost (Log + Trend) | 52.58% | 0.43 | 13.00% |
 
 
