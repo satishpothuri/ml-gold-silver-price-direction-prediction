@@ -201,7 +201,7 @@ By utilizing `feature_importances_`, we decoded the "Predictive Logic" of our ch
 * **Relative Value:** The **Gold-Silver** ratio is a top-5 feature for Silver, whereas it was less critical for Gold. A high Gold-Silver ratio often signals that Silver is overextended to the downside and is due for a massive catch-up rally.
 
 
-## Deployment & Future Scope
+## Deployment
 
 ### 1. Operational Strategy
 The models are deployed as a **Decision Support System (DSS)** rather than a fully automated execution bot. This allows a human trader to use the model's "Directional Bias" to take informed decisions. Daily signals generate a "directional Bias" that serves as a risk-management filter. High-probability "Down" signals trigger capital preservation protocols (e.g., tightening stop-losses).
