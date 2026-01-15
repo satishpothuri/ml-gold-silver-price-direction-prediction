@@ -178,7 +178,7 @@ After the initial failure of linear baselines, the project transitioned to non-l
 We evaluated three distinct model architectures across both Gold and Silver. While Gold benefited from the sequential learning of XGBoost, Silver’s volatility was best managed by Random Forest.
 
 | Asset | Model Configuration | Accuracy | Macro F1-Score | Class 0 (Down) Precision / Recall | Class 1 (Up) Precision / Recall
-| :--- | :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- | :--- |
 | **Gold** | Baseline Logistic Regression | 46.81% | 0.44 | 0.45 / 0.77 | 0.54 / 0.23 |
 | **Gold** | Random Forest (Lag + Trend) | 53.29% | 0.43 | 0.42 / 0.12 | 0.55 / 0.87 |
 | **Gold** | **XGBoost (Lag + Trend)** | **52.88%** | **0.46** | **0.44 / 0.18** | **0.55 / 0.81** |
