@@ -149,11 +149,13 @@ The classification baseline utilized **Logistic Regression** to predict market d
 
 ### Advanced Modeling & Feature Engineering
 
+#### **1. Regression Metrics (Price Prediction)**
 Explored additional machine learning models - **Ridge**, **Lesso** and tree-based **Random Forest Regressor** for Gold price prediction using simple lag features. Despite applying Regularization (Ridge/Lasso) and Ensemble methods (Random Forest), the R2 scores remained consistently negative, and the Lasso model reduced all feature coefficients to zero. This indicates that daily macro-economic lags do not have a direct linear or non-linear predictive relationship with exact price returns. Consequently, we moved our focus onto **Price Direction Classification**, focusing on predicting market movement (Up/Down).
 
+#### **2. Classification Metrics (Directional Prediction)**
 Having previous logistic regression as baseline, we experimented tree-based clasification, **Random Forest Classifier**, with lag features. Using GridSearchCV, hyperparameters were turned and the best model achieved 54.50% accuracy for gold and 52.88% accuracy for silver, outperforming the logistic regression. This confirms that the relationships between macro indicators and gold/silver prices are non-linear.
 
-#### Trend and Rolling Features
+#### **3. Trend and Momentum Features**
 
 We then transitioned from a purely macro-economic feature set to a hybrid model including technical indicators (trend and rolling), aiming to capture the non-linear relationship between market momentum and subsequent price direction. We engineering following feature set to demonstrate momentum and volatility of Gold and Silver. 
 
@@ -161,6 +163,7 @@ We then transitioned from a purely macro-economic feature set to a hybrid model 
 * **20-day SMA distance**
 * **10-day Rolling Volatility**
 
+#### **4. Modeling with Trend and Momentum Features
 The transition from a lag-only model to a hybrid Lag + Trend approach resulted in a slight reduction in raw accuracy (53.29% for gold and 53.08% for silver) when using Random Forest Classifier but achieved a significantly more balanced predictive profile. By incorporating trend/momentum features, the model's ability to identify downward reversals (Class 0 Recall - ability to catch days when market turns and goes down) improved significantly. This suggests that while macro-economic lags drive the primary gold trend, technical indicators are essential for capturing the non-linear reversals that traditional lag features often miss.
 
 We finally applied **Gradient Boost (XGBoost)** with hybrid Lag + Trend approach, tuning hyperparameters with GridSearchCV, which achived a moderate accuracy rate for financial trading assets. The XGBoost model emerged as the most robust predictor for gold, achieving a more sophisticated balance between catching 'up' days and identifying 'turning down' days. By utilizing sequential boosting, it reached a Class 0 Recall of 18%, proving it is not just following the trend but actively looking for market reversals. While its raw accuracy (52.88%) was slightly lower than the Random Forest, its superior ability to navigate market reversals makes it the most reliable choice for a real-world trading environment.
@@ -180,24 +183,34 @@ We evaluated three distinct model architectures across both Gold and Silver. Whi
 | **Gold** | Random Forest (Lag + Trend) | 54.50% | 0.41 | 04.00% |
 | **Gold** | **XGBoost (Lag + Trend)** | **52.88%** | **0.46** | **18.00%** |
 | **Silver**| Baseline Logistic Regression | 46.61% | 0.38 | 89.00% (Biased) |
-| **Silver**| XGBoost (Log + Trend) | 52.58% | 0.43 | 13.00% |
 | **Silver**| **Random Forest (Lag + Trend)** | **53.53%** | **0.48** | **23.00%** |
+| **Silver**| XGBoost (Log + Trend) | 52.58% | 0.43 | 13.00% |
+
 
 ### Feature Importance Insights
 By utilizing `feature_importances_`, we decoded the "Predictive Logic" of our champion models:
 
 **Gold Champion (XGBoost):**
 * **Market Sentiment:** Rolling volatility and the VIX index were primary drivers, acting as "fear gauges."
-* **Mean Reversion:** Distance from the 20-day SMA was a top-tier indicator for identifying when Gold was **overextended**.
-* **Macro Stability:** CPI (Inflation) and 10-Year Yields provided the fundamental floor for directional moves.
+* **Mean Reversion:** Distance from the 20-day SMA was a top indicator for identifying when Gold was **overextended**.
+* **Macro Stability:** CPI (Inflation) and 10-Year Yields have significant influence on gold price movements.
 
 **Silver Champion (Random Forest):**
 * **Growth Correlation:** Unlike Gold, Silver showed a high dependency on the **S&P 500** and **Oil prices**, reflecting its industrial demand.
-* **Momentum Clustering:** 5-day momentum was the strongest feature, confirming Silver as a high-beta, trend-following asset.
-* **Relative Value:** The **Gold-Silver Ratio** proved essential for identifying technical reversals.
+* **Momentum Clustering:** 5-day momentum was the strongest feature, confirming Silver as trend-following asset.
+* **Relative Value:** The **Gold-Silver** ratio is a top-5 feature for Silver, whereas it was less critical for Gold. A high Gold-Silver ratio often signals that Silver is overextended to the downside and is due for a massive catch-up rally.
 
 
+## Deployment & Future Scope
 
+### 1. Operational Strategy
+The models are deployed as a **Decision Support System (DSS)** rather than a fully automated execution bot. This allows a human trader to use the model's "Directional Bias" to take informed decisions. Daily signals generate a "directional Bias" that serves as a risk-management filter. High-probability "Down" signals trigger capital preservation protocols (e.g., tightening stop-losses).
+
+### 2. Continuous Improvement
+* **Model Monitoring:** The models will not remain static; they will be constantly evaluated against real-world market data at regular intervals (e.g., weekly or monthly). This allows us to monitor for "Model Drift," ensuring that the logic the model learned in training still applies to current market conditions. 
+* **Alternative Data:** Future work involves integrating NLP-based sentiment analysis to capture geopolitical shocks and "Black Swan" events that numerical lags cannot anticipate. While the current models rely on technical and macro-economic data, future iterations will explore unstructured data sources to account for major events. This includes:
+  * **Geopolitical Sentiment**: Integrating news-based sentiment analysis to gauge the impact of conflicts or trade wars.
+  * **Event-Driven Indicators**: Factoring in natural calamities or sudden supply-chain disruptions that historical price lags might not immediately capture.
 
 
 
