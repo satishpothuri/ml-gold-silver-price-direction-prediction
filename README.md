@@ -2,7 +2,7 @@
 An EDA and Baseline Modeling project using CRISP-DM to predict the daily directional movement of Gold and Silver prices using macro-economic indicators.
 
 **Full analysis and code:**  
-👉 [Jupyter Notebook – Gold and Silver Price Direction Prediction](./gold-silver-price-prediction-EDA-Final.ipynb)
+👉 [Jupyter Notebook – Gold and Silver Price Direction Prediction](./gold-silver-price-direction-prediction-final.ipynb)
 
 ## Business Understanding
 ### Objective
@@ -213,7 +213,14 @@ The models are deployed as a **Decision Support System (DSS)** rather than a ful
   * **Event-Driven Indicators**: Factoring in natural calamities or sudden supply-chain disruptions that historical price lags might not immediately capture.
 
 
+## Project Author & Certification
 
+**Author**: Satish Kumar Pothuri
 
+**Project**: Final Capstone
+
+**Program**: Professional Certificate in Machine Learning & Artificial Intelligence | **Institution**: [*UC Berkeley Executive Education*]
+
+**Contact**: [LinkedIn](https://www.linkedin.com/in/satishpothuri/)
 
 
