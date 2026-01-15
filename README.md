@@ -1,5 +1,5 @@
-# ml-gold-silver-price-direction
-An EDA and Baseline Modeling project using CRISP-DM to predict the daily directional movement of Gold and Silver prices using macro-economic indicators.
+# ml-gold-silver-price-direction-prediction
+A Machine Learning Modeling project using CRISP-DM to predict the daily directional movement of Gold and Silver prices using macro-economic indicators.
 
 **Full analysis and code:**  
 👉 [Jupyter Notebook – Gold and Silver Price Direction Prediction](./gold-silver-price-direction-prediction-final.ipynb)
