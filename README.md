@@ -163,7 +163,7 @@ We then transitioned from a purely macro-economic feature set to a hybrid model 
 * **20-day SMA distance**
 * **10-day Rolling Volatility**
 
-#### **4. Modeling with Trend and Momentum Features
+#### **4. Modeling with Trend and Momentum Features**
 The transition from a lag-only model to a hybrid Lag + Trend approach resulted in a slight reduction in raw accuracy (53.29% for gold and 53.08% for silver) when using Random Forest Classifier but achieved a significantly more balanced predictive profile. By incorporating trend/momentum features, the model's ability to identify downward reversals (Class 0 Recall - ability to catch days when market turns and goes down) improved significantly. This suggests that while macro-economic lags drive the primary gold trend, technical indicators are essential for capturing the non-linear reversals that traditional lag features often miss.
 
 We finally applied **Gradient Boost (XGBoost)** with hybrid Lag + Trend approach, tuning hyperparameters with GridSearchCV, which achived a moderate accuracy rate for financial trading assets. The XGBoost model emerged as the most robust predictor for gold, achieving a more sophisticated balance between catching 'up' days and identifying 'turning down' days. By utilizing sequential boosting, it reached a Class 0 Recall of 18%, proving it is not just following the trend but actively looking for market reversals. While its raw accuracy (52.88%) was slightly lower than the Random Forest, its superior ability to navigate market reversals makes it the most reliable choice for a real-world trading environment.
